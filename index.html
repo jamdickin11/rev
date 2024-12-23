@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="black">
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/96913755?v=4" type="image/x-icon"/>
+    <script src="https://kit.fontawesome.com/f3220d5256.js" crossorigin="anonymous"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify that you are a human by filling a captcha</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(90deg, rgb(232, 236, 234), 74%, rgb(172, 190, 198));
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        input,
+        button {
+            outline: none;
+        }
+
+        .main {
+            padding: 0 10px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 10px 20px 0 rgba(0, 0, 0, .6);
+            padding: 20px 20px;
+            text-align: center;
+            border-radius: .4rem;
+            width: 350px;
+            color: #fff;
+            background: #2a2d2e;
+            animation: pop 1s ease-in-out;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .text {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: .5rem;
+            font-size: 1rem;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            box-sizing: border-box;
+            transition: all .3s ease;
+            text-align: center;
+            user-select: none;
+        }
+
+        .text:focus {
+            outline: none;
+            border-color: #007BFF;
+            background-color: #f0f8ff;
+        }
+
+        .btn {
+            margin-top: .5rem;
+            width: 100%;
+            cursor: pointer;
+            padding: .7rem 1rem;
+            font-size: 1.3rem;
+            border: none;
+            color: #fff;
+            border-radius: .4rem;
+            background: rgb(0, 128, 79);
+            overflow: hidden;
+            position: relative;
+            pointer-events: none;
+            opacity: .75;
+            transition: all .3s;
+            box-shadow: 6px 7px 40px -4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: hsl(157, 100%, 20%);
+        }
+
+        .btn > span {
+            position: absolute;
+            background: rgba(71, 71, 71, 0.65);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: rippleffect 1s linear infinite;
+        }
+
+        @keyframes rippleffect {
+            0% {
+                height: 0;
+                width: 0;
+            }
+
+            100% {
+                height: 500px;
+                width: 500px;
+            }
+        }
+
+        .head {
+            padding: 0px 20px 30px;
+        }
+
+        .method {
+            border: 3px dashed hsl(0, 0%, 80%);
+            background: hsl(195, 3%, 25%);
+            padding: 10px 10px;
+            font-size: 18px;
+            width: 100%;
+            border-radius: .4rem;
+        }
+
+        .info {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .code {
+            border: 2px dashed #ccc;
+            margin-top: .7rem;
+            padding: 15px 10px;
+            border-radius: .4rem;
+            font-size: 1.3rem;
+            text-decoration: line-through;
+            word-spacing: 5px;
+        }
+
+        .text:focus {
+            box-shadow: 0 5px 30px 0 rgba(47, 103, 128, 0.75);
+        }
+
+        #log {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border: 2px dashed #ccc;
+            padding: 10px;
+            border-radius: .4rem;
+        }
+
+        .blue {
+            background: rgb(88, 88, 250);
+            pointer-events: auto;
+            opacity: 1;
+            width: 100%;
+        }
+
+        #captcha {
+            word-spacing: 5px;
+        }
+
+        .cap {
+            animation: pop 1.5s ease-in-out;
+        }
+
+        .blue:hover {
+            background: hsl(240, 94%, 61%);
+        }
+
+        @media (max-width: 350px) {
+            .card {
+                width: 330px;
+                overflow: hidden;
+            }
+        }
+
+        @media (max-width: 330px) {
+            .card {
+                width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body onload="generate()">
+    <form action="" id="forms">
+        <div class="card">
+            <div class="cap">
+                <div class="head">
+                    <h2>Verify that you are a human</h2>
+                    <br>
+                    <div class="method">
+                        <p>Enter the captcha below to continue</p>
+                    </div>
+                </div>
+                <div class="main">
+                    <input type="text" class="text" placeholder="Enter captcha from below..." onpaste="return false;" oncopy="return false;" oncut="return false;">
+                    <button class="btn" id="btn">
+                        <i class="fa-regular fa-square-check"></i> Verify Captcha
+                    </button>
+                    <div id="log">
+                        Enter the captcha first!
+                    </div>
+                </div>
+                <h4 class="info">Captcha</h4>
+                <div class="code">
+                    <p id="captcha"></p>
+                </div>
+
+                <button class="btn blue" id="refresh">
+                    <i class="fa-solid fa-rotate"></i> Refresh Captcha
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                return false;
+            }
+        };
+
+        const forms = document.getElementById("forms");
+        const field = document.querySelector(".text");
+        const btn = document.getElementById("btn");
+        const captcha = document.getElementById("captcha");
+        const log = document.getElementById("log");
+        const refBtn = document.getElementById("refresh");
+
+        refBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            log.innerHTML = "Generating New Captcha...";
+            log.style.color = 'white';
+
+            setTimeout(gen, 1500);
+
+            function gen() {
+                field.value = "";
+                log.innerHTML = "Done!";
+                log.style.color = 'rgb(201, 245, 9)';
+                generate();
+            }
+        });
+
+        function generate(length) {
+            btn.value = "";
+            let uniqueChar = "";
+            const randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (let i = 1; i < 6; i++) {
+                uniqueChar += randomChar.charAt(Math.random() * randomChar.length);
+            }
+            captcha.innerHTML = uniqueChar;
+        }
+
+        forms.addEventListener("submit", (e) => {
+            log.innerHTML = "Verifying one moment please...";
+            log.style.color = 'white';
+            e.preventDefault();
+
+            if (field.value === '' || field.value == null) {
+                e.preventDefault();
+            }
+
+            setTimeout(fun, 1500);
+
+            function fun() {
+                if (field.value == captcha.innerHTML) {
+                    log.style.color = 'rgb(1, 182, 113)';
+                    log.innerHTML = "Verified Successfully";
+                    sessionStorage.setItem('captcha_verified', 'true'); // Ensure the flag is set
+                    generate();
+                    setTimeout(load, 2000);
+
+                    function load() {
+                        // Generate token and redirect with token in URL
+                        const token = generateToken();
+                        sessionStorage.setItem('accessToken', token); // Store the token in sessionStorage
+                        window.location.href = `./index2.html?token=${token}`;
+                    }
+                } else {
+                    generate();
+                    log.style.color = '#d1245e';
+                    log.innerHTML = "Invalid captcha!";
+                    console.error("Invalid Captcha!!");
+                }
+            }
+        });
+
+        field.addEventListener("input", (e) => {
+            if (field.value.length > 0) {
+                btn.style.pointerEvents = "auto";
+                btn.style.opacity = "1";
+            } else {
+                btn.style.pointerEvents = "none";
+                btn.style.opacity = "0.75";
+            }
+        });
+
+        function generateToken() {
+            return btoa(Math.random().toString()).substring(0, 16);
+        }
+
+
+    </script>
+</body>
+</html>
